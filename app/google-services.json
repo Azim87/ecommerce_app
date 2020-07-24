@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "55262890705",
+    "firebase_url": "https://ecommerceapp-f4a5a.firebaseio.com",
+    "project_id": "ecommerceapp-f4a5a",
+    "storage_bucket": "ecommerceapp-f4a5a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55262890705:android:ea4ca70d6a0489b18713f0",
+        "android_client_info": {
+          "package_name": "kg.azimus.ecommerce"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "55262890705-479pj3b0r3n7cm1j7ku2ecsi12o2pk80.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kg.azimus.ecommerce",
+            "certificate_hash": "d06f50be4458584c306a47e02e8b016996cf448c"
+          }
+        },
+        {
+          "client_id": "55262890705-ndn73l6ed2kma8jfatcap5vl67126j3m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXQyNX5tnTjeI0e0SKGi1qSNRV3wWMags"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "55262890705-ndn73l6ed2kma8jfatcap5vl67126j3m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
