@@ -10,7 +10,6 @@
     <string name="admin">I`m an Admin?</string>
     <string name="not_admin">I`m not an Admin</string>
     <string name="create_account">Create An Account</string>
-    <string name="enter_password">password</string>
-    <string name="enter_email">email</string>
-    <string name="enter_name">name</string>
+    <string name="enter_password">Password</string>
+    <string name="enter_name">Name</string>
 </resources>

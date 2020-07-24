@@ -5,7 +5,10 @@ import android.content.Context
 import android.content.Intent
 
 class ActivityHelper {
-    inline fun <reified T: Activity> start(context: Context) {
-        context.startActivity(Intent(context, T::class.java))
+
+    companion object {
+        inline fun <reified T : Activity> start(context: Context) {
+            context.startActivity(Intent(context, T::class.java))
+        }
     }
 }
