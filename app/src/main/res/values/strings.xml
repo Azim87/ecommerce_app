@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">eCommerce</string>
+    <string name="slogan_text">Find, Discover, Choose and Buy anything online</string>
+    <string name="join_now">Join Now</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="password">Password</string>
+    <string name="forget_password">Forget Password?</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="login">Login</string>
+    <string name="admin">I`m an Admin?</string>
+    <string name="not_admin">I`m not an Admin</string>
 </resources>
