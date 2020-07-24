@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#8E8E8E</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="colorWhiteish">#ECE7E7</color>
+    <color name="colorTransparent">#00FFFFFF</color>
+    <color name="progress_start">#F34711</color>
+    <color name="progress_end">#D60000</color>
 </resources>

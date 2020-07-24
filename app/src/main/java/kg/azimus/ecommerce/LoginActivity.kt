@@ -7,13 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 
 class LoginActivity : AppCompatActivity() {
 
-
-    companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, LoginActivity::class.java))
-        }
-    }
-
+//    companion object {
+//        fun start(context: Context) {
+//            context.startActivity(Intent(context, LoginActivity::class.java))
+//        }
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
