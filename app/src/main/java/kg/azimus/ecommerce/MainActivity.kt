@@ -21,13 +21,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Paper.init(this)
-        showLoading(true)
         init()
+        showLoading(true)
     }
 
     private fun init() {
         welcome_btn.setOnClickListener {
-            //LoginActivity.start(this)
             ActivityHelper.start<LoginActivity>(this)
             finish()
         }
@@ -53,10 +52,12 @@ class MainActivity : AppCompatActivity() {
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.child("Users").child(phoneNumber).exists()) {
-                    val userModel: UserModel? =
-                        snapshot.child("Users").child(phoneNumber).getValue(UserModel::class.java)
+                    val userModel: UserModel? = snapshot
+                        .child("Users")
+                        .child(phoneNumber)
+                        .getValue(UserModel::class.java)
                     if (userModel!!.phoneNumber.equals(phoneNumber)) {
-                        if (userModel!!.password.equals(password)) {
+                        if (userModel.password.equals(password)) {
                             toast(this@MainActivity, "Login Successful.")
                             ActivityHelper.start<HomeActivity>(this@MainActivity)
                             finish()
@@ -79,6 +80,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showLoading(isLoading: Boolean) {
-        main_progress.visibility = if(isLoading) View.VISIBLE else View.INVISIBLE
+        main_progress.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
     }
 }

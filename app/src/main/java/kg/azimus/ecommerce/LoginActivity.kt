@@ -18,7 +18,7 @@ import kg.azimus.util.toast
 import kotlinx.android.synthetic.main.activity_login.*
 
 private const val TAG = "LoginActivity"
-private const val USERS = "Users"
+private var DB_NAME = "Users"
 
 class LoginActivity : AppCompatActivity() {
 
@@ -26,6 +26,9 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         onLogInButtonClick()
+        onAdminClick()
+        onNotAdminClick()
+        Paper.init(this)
     }
 
     private fun onLogInButtonClick() {
@@ -54,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun allowAccessToAccount(phoneNumber: String, password: String) {
-        if(remember_me.isChecked) {
+        if (remember_me.isChecked) {
             Paper.book().write(Prevalent.UserPhoneKey, phoneNumber)
             Paper.book().write(Prevalent.UserPasswordKey, password)
         }
@@ -64,16 +67,25 @@ class LoginActivity : AppCompatActivity() {
 
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.child(USERS).child(phoneNumber).exists()) {
+                if (snapshot.child(DB_NAME).child(phoneNumber).exists()) {
                     val userModel: UserModel? =
-                        snapshot.child(USERS).child(phoneNumber).getValue(UserModel::class.java)
+                        snapshot.child(DB_NAME).child(phoneNumber).getValue(UserModel::class.java)
                     if (userModel!!.phoneNumber.equals(phoneNumber)) {
-                        if (userModel!!.password.equals(password)) {
-                            toast(this@LoginActivity, "Login Successful.")
-                            ActivityHelper.start<HomeActivity>(this@LoginActivity)
-                            finish()
-                            showLoading(false)
-                            clearUserData()
+                        if (userModel.password.equals(password)) {
+                            if (DB_NAME == "Admin") {
+                                toast(this@LoginActivity, "Login Successful.")
+                                ActivityHelper.start<AdminActivity>(this@LoginActivity)
+                                finish()
+                                showLoading(false)
+                                clearUserData()
+                            } else if (DB_NAME == "Users") {
+                                toast(this@LoginActivity, "Login Successful.")
+                                ActivityHelper.start<HomeActivity>(this@LoginActivity)
+                                finish()
+                                showLoading(false)
+                                clearUserData()
+                            }
+
                         } else {
                             toast(this@LoginActivity, "Password is incorrect")
                             showLoading(false)
@@ -89,6 +101,26 @@ class LoginActivity : AppCompatActivity() {
                 toast(this@LoginActivity, "Error ${error.message}")
             }
         })
+    }
+
+    private fun onAdminClick() {
+        login_an_admin.setOnClickListener {
+            Log.d(TAG, "onAdminClick: admin click")
+            login_btn.text = "Login as Admin"
+            login_an_admin.visibility = View.INVISIBLE
+            login_non_admin.visibility = View.VISIBLE
+            DB_NAME = "Admin"
+        }
+    }
+
+    private fun onNotAdminClick() {
+        login_non_admin.setOnClickListener {
+            Log.d(TAG, "onNotAdminClick: not admin click")
+            login_btn.text = "Login"
+            login_an_admin.visibility = View.VISIBLE
+            login_non_admin.visibility = View.INVISIBLE
+            DB_NAME = "Users"
+        }
     }
 
     private fun clearUserData() {
