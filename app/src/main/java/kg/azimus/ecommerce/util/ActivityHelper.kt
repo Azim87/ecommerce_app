@@ -1,4 +1,4 @@
-package kg.azimus.util
+package kg.azimus.ecommerce.util
 
 import android.app.Activity
 import android.content.Context

@@ -1,4 +1,4 @@
-package kg.azimus.ecommerce
+package kg.azimus.ecommerce.ui
 
 import android.os.Bundle
 import android.text.TextUtils
@@ -7,14 +7,14 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import io.paperdb.Paper
-import kg.azimus.model.UserModel
-import kg.azimus.util.ActivityHelper
-import kg.azimus.util.Prevalent
-import kg.azimus.util.toast
+import kg.azimus.ecommerce.R
+import kg.azimus.ecommerce.model.UserModel
+import kg.azimus.ecommerce.util.ActivityHelper
+import kg.azimus.ecommerce.util.Prevalent
+import kg.azimus.ecommerce.util.toast
 import kotlinx.android.synthetic.main.activity_login.*
 
 private const val TAG = "LoginActivity"
@@ -42,12 +42,8 @@ class LoginActivity : AppCompatActivity() {
 
     private fun loginUser(phoneNumber: String, password: String) {
         when {
-            TextUtils.isEmpty(phoneNumber) -> {
-                toast(this, "email is empty")
-            }
-            TextUtils.isEmpty(password) -> {
-                toast(this, "password is empty")
-            }
+            TextUtils.isEmpty(phoneNumber) -> { toast(this, "email is empty") }
+            TextUtils.isEmpty(password) -> { toast(this, "password is empty") }
             else -> {
                 showLoading(true)
                 allowAccessToAccount(phoneNumber, password)
@@ -62,25 +58,31 @@ class LoginActivity : AppCompatActivity() {
             Paper.book().write(Prevalent.UserPasswordKey, password)
         }
 
-        val dataBase = Firebase.database
-        val myRef = dataBase.getReference("User")
+        val dataBase = FirebaseDatabase.getInstance()
+        val myRef = dataBase.reference
 
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.child(DB_NAME).child(phoneNumber).exists()) {
                     val userModel: UserModel? =
-                        snapshot.child(DB_NAME).child(phoneNumber).getValue(UserModel::class.java)
+                        snapshot
+                            .child(DB_NAME)
+                            .child(phoneNumber)
+                            .getValue(UserModel::class.java)
                     if (userModel!!.phoneNumber.equals(phoneNumber)) {
                         if (userModel.password.equals(password)) {
                             if (DB_NAME == "Admin") {
                                 toast(this@LoginActivity, "Login Successful.")
-                                ActivityHelper.start<AdminActivity>(this@LoginActivity)
+                                ActivityHelper.start<AdminCategoryActivity>(this@LoginActivity)
+                                Log.d(TAG, "onDataChange:  admin" )
                                 finish()
                                 showLoading(false)
                                 clearUserData()
+
                             } else if (DB_NAME == "Users") {
                                 toast(this@LoginActivity, "Login Successful.")
                                 ActivityHelper.start<HomeActivity>(this@LoginActivity)
+                                Log.d(TAG, "onDataChange: user")
                                 finish()
                                 showLoading(false)
                                 clearUserData()
@@ -105,21 +107,21 @@ class LoginActivity : AppCompatActivity() {
 
     private fun onAdminClick() {
         login_an_admin.setOnClickListener {
+            DB_NAME = "Admin"
             Log.d(TAG, "onAdminClick: admin click")
             login_btn.text = "Login as Admin"
             login_an_admin.visibility = View.INVISIBLE
             login_non_admin.visibility = View.VISIBLE
-            DB_NAME = "Admin"
         }
     }
 
     private fun onNotAdminClick() {
         login_non_admin.setOnClickListener {
+            DB_NAME = "Users"
             Log.d(TAG, "onNotAdminClick: not admin click")
             login_btn.text = "Login"
             login_an_admin.visibility = View.VISIBLE
             login_non_admin.visibility = View.INVISIBLE
-            DB_NAME = "Users"
         }
     }
 
@@ -130,6 +132,5 @@ class LoginActivity : AppCompatActivity() {
 
     private fun showLoading(isLoading: Boolean) {
         login_progress.visibility = if (isLoading) View.VISIBLE else View.INVISIBLE
-
     }
 }

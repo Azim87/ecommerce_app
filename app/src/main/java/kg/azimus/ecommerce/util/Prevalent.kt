@@ -1,6 +1,6 @@
-package kg.azimus.util
+package kg.azimus.ecommerce.util
 
-import kg.azimus.model.UserModel
+import kg.azimus.ecommerce.model.UserModel
 
 class Prevalent {
     companion object {

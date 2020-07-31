@@ -1,4 +1,4 @@
-package kg.azimus.model
+package kg.azimus.ecommerce.model
 
 data class UserModel(
     val userName: String?,

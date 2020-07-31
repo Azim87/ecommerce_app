@@ -1,4 +1,4 @@
-package kg.azimus.ecommerce
+package kg.azimus.ecommerce.ui
 
 import android.os.Bundle
 import android.text.TextUtils
@@ -6,14 +6,14 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import io.paperdb.Paper
-import kg.azimus.model.UserModel
-import kg.azimus.util.ActivityHelper
-import kg.azimus.util.Prevalent
-import kg.azimus.util.toast
+import kg.azimus.ecommerce.R
+import kg.azimus.ecommerce.model.UserModel
+import kg.azimus.ecommerce.util.ActivityHelper
+import kg.azimus.ecommerce.util.Prevalent
+import kg.azimus.ecommerce.util.toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -46,8 +46,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun allowAccess(phoneNumber: String, password: String) {
-        val dataBase = Firebase.database
-        val myRef = dataBase.getReference("User")
+        val dataBase = FirebaseDatabase.getInstance()
+        val myRef = dataBase.reference
 
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

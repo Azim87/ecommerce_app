@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/login"
-    tools:context=".LoginActivity">
+    tools:context=".ui.LoginActivity">
 
     <ImageView
         android:id="@+id/login_logo"
@@ -132,6 +132,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="75dp"
             android:elevation="4dp"
+            android:visibility="invisible"
             android:text="@string/not_admin"
             android:textColor="@color/colorWhite"
             android:textSize="20sp"

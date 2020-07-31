@@ -1,4 +1,4 @@
-package kg.azimus.ecommerce
+package kg.azimus.ecommerce.ui
 
 import android.os.Bundle
 import android.text.TextUtils
@@ -7,11 +7,11 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import kg.azimus.util.ActivityHelper
-import kg.azimus.util.toast
+import kg.azimus.ecommerce.R
+import kg.azimus.ecommerce.util.ActivityHelper
+import kg.azimus.ecommerce.util.toast
 import kotlinx.android.synthetic.main.activity_register.*
 
 private const val TAG = "RegisterActivity"
@@ -62,8 +62,8 @@ class RegisterActivity : AppCompatActivity() {
         phoneNumber: String,
         password: String
     ) {
-        val dataBase = Firebase.database
-        val myRef = dataBase.getReference("User")
+        val dataBase = FirebaseDatabase.getInstance()
+        val myRef = dataBase.reference
 
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
