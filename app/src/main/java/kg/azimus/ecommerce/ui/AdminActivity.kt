@@ -11,12 +11,12 @@ import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import kg.azimus.ecommerce.R
+import kg.azimus.ecommerce.util.ActivityHelper
 import kg.azimus.ecommerce.util.toast
 import kotlinx.android.synthetic.main.activity_admin.*
 import java.io.ByteArrayOutputStream
@@ -39,6 +39,7 @@ class AdminActivity : AppCompatActivity() {
     private var downLoadImageUri: String? = null
     private var category: String? = null
     private lateinit var saveCurrentDate: String
+    private lateinit var saveCurrentTime: String
     private var productRandomKey: String? = null
     private var productName: String? = null
     private var productDescription: String? = null
@@ -50,10 +51,12 @@ class AdminActivity : AppCompatActivity() {
         Log.d(TAG, "onCreate: start Admin activity")
 
         mStorage = FirebaseStorage.getInstance().reference.child("Product images")
-        mDataBaseReference = FirebaseDatabase.getInstance().reference.child("Products")
+        val dataBase = FirebaseDatabase.getInstance()
+        mDataBaseReference = dataBase.reference.child("Products")
 
         getCategoryIntent()
         onInputProductClick()
+        addNewProduct()
     }
 
     private fun getCategoryIntent() {
@@ -80,7 +83,6 @@ class AdminActivity : AppCompatActivity() {
         if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             imageUri = data.data
             select_product_image.setImageURI(imageUri!!)
-            addNewProduct()
         }
     }
 
@@ -118,14 +120,17 @@ class AdminActivity : AppCompatActivity() {
     @SuppressLint("SimpleDateFormat")
     private fun storeProductInfo() {
 
-        val currentDate = SimpleDateFormat()
+        val calendar = Calendar.getInstance()
+        val currentDate = SimpleDateFormat("dd MM,yyyy", Locale.getDefault())
         saveCurrentDate = currentDate.format(Date())
 
-        productRandomKey = saveCurrentDate
+        val currentTime = SimpleDateFormat("HH:mm:ss a")
+        saveCurrentTime = currentTime.format(calendar.time)
+
+        productRandomKey = "$saveCurrentDate $saveCurrentTime"
 
         val filePath =
-            mStorage.child(imageUri?.lastPathSegment + productRandomKey.toString() + ".jpg")
-
+            mStorage.child(imageUri!!.lastPathSegment + productRandomKey + ".jpg")
 
         val bmp = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
         val baos = ByteArrayOutputStream()
@@ -147,36 +152,39 @@ class AdminActivity : AppCompatActivity() {
                 downLoadImageUri = filePath.downloadUrl.toString()
                 return@continueWithTask filePath.downloadUrl
 
-            }.addOnCompleteListener{task ->
-                if (task.isSuccessful) {
-                    saveProductInfoToDb()
-                }
+            }
+        }.addOnCompleteListener {
+            if (it.isSuccessful) {
+                //downLoadImageUri = it.result.toString()
+                toast(this, "got the Product image Url Successfully...")
+                saveInfoToDb()
             }
         }
     }
 
-    private fun saveProductInfoToDb() {
+    private fun saveInfoToDb() {
         Log.d(TAG, "saveProductInfoToDb: save to db")
-
 
         val productMap: HashMap<String, Any> = HashMap()
         productMap["pid"] = productRandomKey!!
         productMap["date"] = saveCurrentDate
         productMap["description"] = productDescription!!
-        productMap["image"] = imageUri!!
+        productMap["image"] = imageUri.toString()
         productMap["category"] = category!!
         productMap["price"] = productPrice!!
-        productMap["pname"] = productName!!
-
+        productMap["name"] = productName!!
 
         mDataBaseReference.child(productRandomKey!!).updateChildren(productMap)
-            .addOnCompleteListener { task: Task<Void> ->
-                if (task.isSuccessful) {
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
                     toast(this, "ok")
+                    ActivityHelper.start<AdminCategoryActivity>(this)
+                    showLoading(false)
+                } else {
+                    toast(this, "Error: ${it.exception}")
+                    showLoading(false)
                 }
             }
-
-
     }
 
     private fun showLoading(isLoading: Boolean) {

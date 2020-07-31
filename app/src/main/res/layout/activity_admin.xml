@@ -52,7 +52,7 @@
         android:layout_marginRight="45dp"
         android:background="@drawable/input_style"
         android:hint="Product Price..."
-        android:inputType="textMultiLine"
+        android:inputType="number"
         android:padding="20dp" />
 
     <Button
