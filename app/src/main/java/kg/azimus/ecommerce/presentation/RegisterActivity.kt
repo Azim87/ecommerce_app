@@ -1,4 +1,4 @@
-package kg.azimus.ecommerce.ui
+package kg.azimus.ecommerce.presentation
 
 import android.os.Bundle
 import android.text.TextUtils

@@ -12,12 +12,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ui.AdminCategoryActivity"/>
-        <activity android:name=".ui.AdminActivity" />
-        <activity android:name=".ui.HomeActivity" />
-        <activity android:name=".ui.RegisterActivity" />
-        <activity android:name=".ui.LoginActivity" />
-        <activity android:name=".ui.MainActivity">
+        <activity
+            android:name=".presentation.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".presentation.AdminCategoryActivity" />
+        <activity android:name=".presentation.AdminActivity" />
+        <activity android:name=".presentation.RegisterActivity" />
+        <activity android:name=".presentation.LoginActivity" />
+        <activity android:name=".presentation.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

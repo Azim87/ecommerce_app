@@ -1,4 +1,4 @@
-package kg.azimus.ecommerce.ui
+package kg.azimus.ecommerce.presentation
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -179,12 +179,20 @@ class AdminActivity : AppCompatActivity() {
                 if (it.isSuccessful) {
                     toast(this, "ok")
                     ActivityHelper.start<AdminCategoryActivity>(this)
+                    finish()
+                    updateInputs()
                     showLoading(false)
                 } else {
                     toast(this, "Error: ${it.exception}")
                     showLoading(false)
                 }
             }
+    }
+
+    private fun updateInputs() {
+        product_name.setText("")
+        product_description.setText("")
+        product_price.setText("")
     }
 
     private fun showLoading(isLoading: Boolean) {
