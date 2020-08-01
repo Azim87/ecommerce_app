@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Paper.init(this)
         init()
-        showLoading(true)
     }
 
     private fun init() {
@@ -41,6 +40,7 @@ class MainActivity : AppCompatActivity() {
 
             if (!TextUtils.isEmpty(userPhoneKey) && !TextUtils.isEmpty(userPasswordKey)) {
                 allowAccess(userPhoneKey, userPasswordKey)
+                showLoading(true)
             }
         }
     }
@@ -75,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {
                 toast(this@MainActivity, "Error ${error.message}")
+                showLoading(false)
             }
         })
     }

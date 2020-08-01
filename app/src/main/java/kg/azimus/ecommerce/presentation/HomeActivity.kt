@@ -3,6 +3,8 @@ package kg.azimus.ecommerce.presentation
 import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.GravityCompat
@@ -14,6 +16,8 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
 import io.paperdb.Paper
 import kg.azimus.ecommerce.R
+import kg.azimus.ecommerce.util.Prevalent
+import kg.azimus.ecommerce.util.toast
 
 
 class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -28,6 +32,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         Paper.init(this)
         setUpNavigation()
+        setUserName()
     }
 
     private fun setUpNavigation() {
@@ -38,7 +43,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navView: NavigationView = findViewById(R.id.nav_main_view)
         navController = Navigation.findNavController(this, R.id.nav_host_fragment)
         NavigationUI.setupActionBarWithNavController(this, navController!!, drawerLayout)
-
         NavigationUI.setupWithNavController(navView, navController!!)
         navView.setNavigationItemSelectedListener(this)
     }
@@ -52,7 +56,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         when (menuItem.itemId) {
             R.id.nav_logout -> logOut()
-            R.id.nav_cart -> navController!!.navigate(R.id.homeFragment)
+            R.id.nav_cart -> {
+                toast(this, "cart")
+            }
         }
         return true
     }
@@ -72,5 +78,12 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
+    }
+
+    private fun setUserName() {
+        val navigationView = findViewById<View>(R.id.nav_main_view) as NavigationView
+        val headerView = navigationView.getHeaderView(0)
+        val navUsername: TextView = headerView.findViewById<View>(R.id.username_tv) as TextView
+        navUsername.text = Prevalent.currentUserOnline.userName
     }
 }

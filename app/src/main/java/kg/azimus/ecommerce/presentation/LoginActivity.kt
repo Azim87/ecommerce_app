@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -15,7 +17,10 @@ import kg.azimus.ecommerce.model.UserModel
 import kg.azimus.ecommerce.util.ActivityHelper
 import kg.azimus.ecommerce.util.Prevalent
 import kg.azimus.ecommerce.util.toast
+import kotlinx.android.synthetic.main.activity_home.view.*
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.nav_header_main.*
+
 
 private const val TAG = "LoginActivity"
 private var DB_NAME = "Users"
@@ -82,6 +87,7 @@ class LoginActivity : AppCompatActivity() {
                             } else if (DB_NAME == "Users") {
                                 toast(this@LoginActivity, "Login Successful.")
                                 ActivityHelper.start<HomeActivity>(this@LoginActivity)
+                                Prevalent.currentUserOnline = userModel
                                 Log.d(TAG, "onDataChange: user")
                                 finish()
                                 showLoading(false)

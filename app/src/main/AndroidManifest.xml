@@ -10,16 +10,20 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/AppThemeStatusBarDark"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".presentation.HomeActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".presentation.HomeActivity" />
         <activity android:name=".presentation.AdminCategoryActivity" />
         <activity android:name=".presentation.AdminActivity" />
-        <activity android:name=".presentation.RegisterActivity" />
-        <activity android:name=".presentation.LoginActivity" />
-        <activity android:name=".presentation.MainActivity">
+        <activity
+            android:name=".presentation.RegisterActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".presentation.LoginActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".presentation.MainActivity"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

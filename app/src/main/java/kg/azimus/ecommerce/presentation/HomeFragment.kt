@@ -6,9 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import kg.azimus.ecommerce.R
+import kg.azimus.ecommerce.util.Prevalent
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 class HomeFragment : Fragment() {
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
