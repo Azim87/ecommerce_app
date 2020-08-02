@@ -1,4 +1,4 @@
-package kg.azimus.ecommerce.presentation
+package kg.azimus.ecommerce.presentation.home
 
 import android.content.Intent
 import android.os.Bundle
@@ -16,6 +16,7 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.navigation.NavigationView
 import io.paperdb.Paper
 import kg.azimus.ecommerce.R
+import kg.azimus.ecommerce.presentation.MainActivity
 import kg.azimus.ecommerce.util.Prevalent
 import kg.azimus.ecommerce.util.toast
 
@@ -53,12 +54,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-
         when (menuItem.itemId) {
             R.id.nav_logout -> logOut()
-            R.id.nav_cart -> {
-                toast(this, "cart")
-            }
+            R.id.nav_cart -> { toast(this, "cart") }
         }
         return true
     }

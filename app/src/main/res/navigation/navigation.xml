@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="kg.azimus.ecommerce.presentation.HomeFragment"
-        android:label="HomeFragment" />
+        android:name="kg.azimus.ecommerce.presentation.home.HomeFragment"
+        android:label="" />
 </navigation>

@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.navigation.NavigationView
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -14,12 +12,11 @@ import com.google.firebase.database.ValueEventListener
 import io.paperdb.Paper
 import kg.azimus.ecommerce.R
 import kg.azimus.ecommerce.model.UserModel
+import kg.azimus.ecommerce.presentation.home.HomeActivity
 import kg.azimus.ecommerce.util.ActivityHelper
 import kg.azimus.ecommerce.util.Prevalent
 import kg.azimus.ecommerce.util.toast
-import kotlinx.android.synthetic.main.activity_home.view.*
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.nav_header_main.*
 
 
 private const val TAG = "LoginActivity"

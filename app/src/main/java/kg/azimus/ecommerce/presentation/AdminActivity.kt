@@ -152,24 +152,23 @@ class AdminActivity : AppCompatActivity() {
                 downLoadImageUri = filePath.downloadUrl.toString()
                 return@continueWithTask filePath.downloadUrl
 
-            }
-        }.addOnCompleteListener {
-            if (it.isSuccessful) {
-                //downLoadImageUri = it.result.toString()
-                toast(this, "got the Product image Url Successfully...")
-                saveInfoToDb()
+            }.addOnCompleteListener {
+                if (it.isSuccessful) {
+                    downLoadImageUri = it.result!!.toString()
+                    toast(this, "got the Product image Url Successfully...")
+                    saveInfoToDb()
+                }
             }
         }
     }
 
     private fun saveInfoToDb() {
         Log.d(TAG, "saveProductInfoToDb: save to db")
-
         val productMap: HashMap<String, Any> = HashMap()
         productMap["pid"] = productRandomKey!!
         productMap["date"] = saveCurrentDate
         productMap["description"] = productDescription!!
-        productMap["image"] = imageUri.toString()
+        productMap["image"] = downLoadImageUri.toString()
         productMap["category"] = category!!
         productMap["price"] = productPrice!!
         productMap["name"] = productName!!
@@ -177,7 +176,6 @@ class AdminActivity : AppCompatActivity() {
         mDataBaseReference.child(productRandomKey!!).updateChildren(productMap)
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    toast(this, "ok")
                     ActivityHelper.start<AdminCategoryActivity>(this)
                     finish()
                     updateInputs()
