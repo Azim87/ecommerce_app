@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -15,11 +16,13 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.yalantis.ucrop.UCrop
 import kg.azimus.ecommerce.R
 import kg.azimus.ecommerce.util.ActivityHelper
 import kg.azimus.ecommerce.util.toast
 import kotlinx.android.synthetic.main.activity_admin.*
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.HashMap
@@ -33,13 +36,12 @@ class AdminActivity : AppCompatActivity() {
 
     private lateinit var mStorage: StorageReference
     private lateinit var mDataBaseReference: DatabaseReference
-
+    private lateinit var saveCurrentDate: String
+    private lateinit var saveCurrentTime: String
 
     private var imageUri: Uri? = null
     private var downLoadImageUri: String? = null
     private var category: String? = null
-    private lateinit var saveCurrentDate: String
-    private lateinit var saveCurrentTime: String
     private var productRandomKey: String? = null
     private var productName: String? = null
     private var productDescription: String? = null
@@ -80,10 +82,37 @@ class AdminActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == GALLERY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == GALLERY_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
             imageUri = data.data
+            startCrop(imageUri!!)
+        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
+            imageUri= UCrop.getOutput(data!!)
             select_product_image.setImageURI(imageUri!!)
         }
+    }
+
+    private fun startCrop(clientUri: Uri) {
+        var fileName = "sampleCroping"
+        fileName += ".jpg"
+        fileName += ".png"
+        val uCrop =
+            UCrop.of(clientUri, Uri.fromFile(File(cacheDir, fileName)))
+        uCrop.withAspectRatio(1f, 1f)
+        uCrop.withAspectRatio(3f, 4f)
+        uCrop.withAspectRatio(16f, 9f)
+        uCrop.withAspectRatio(2f, 3f)
+        uCrop.useSourceImageAspectRatio()
+        uCrop.withMaxResultSize(1200, 1200)
+        uCrop.withOptions(getOptions()!!)
+        uCrop.start(this@AdminActivity)
+    }
+
+    private fun getOptions(): UCrop.Options? {
+        val options = UCrop.Options()
+        options.setFreeStyleCropEnabled(true)
+        options.setCompressionQuality(70)
+        options.setLogoColor(Color.BLUE)
+        return options
     }
 
     private fun addNewProduct() {

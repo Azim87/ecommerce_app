@@ -1,13 +1,18 @@
 package kg.azimus.ecommerce.presentation.home.adapter
 
-import android.net.Uri
+import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import kg.azimus.ecommerce.R
 import kg.azimus.ecommerce.model.Products
 
@@ -27,7 +32,6 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-
         holder.bind(mProductsList[position])
     }
 
@@ -39,10 +43,35 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() 
         val price: TextView = itemView.findViewById(R.id.item_product_price)
         val description: TextView = itemView.findViewById(R.id.item_product_description)
         val category: TextView = itemView.findViewById(R.id.item_product_category)
+        val progressBar: ProgressBar = itemView.findViewById(R.id.item_progress_bar)
 
         fun bind(products: Products) {
             name.text = products.name
-            Picasso.get().load(Uri.parse(products.image)).into(imageView)
+            progressBar.visibility = View.VISIBLE
+            Glide.with(imageView.context)
+                .load(products.image)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        progressBar.visibility = View.INVISIBLE
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        progressBar.visibility = View.INVISIBLE
+                        return false
+                    }
+                }).into(imageView)
             price.text = products.price
             description.text = products.description
             category.text = products.category

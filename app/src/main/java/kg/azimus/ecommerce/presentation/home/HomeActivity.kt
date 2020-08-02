@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
@@ -56,12 +57,19 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
             R.id.nav_logout -> logOut()
-            R.id.nav_cart -> { toast(this, "cart") }
+            R.id.nav_settings -> {
+                navController?.navigate(R.id.settingsFragment)
+                onBackPress()
+            }
         }
         return true
     }
 
     override fun onBackPressed() {
+       onBackPress()
+    }
+
+    private fun onBackPress() {
         if (drawerLayout!!.isDrawerOpen(GravityCompat.START)) {
             drawerLayout!!.closeDrawer(GravityCompat.START)
         } else {
