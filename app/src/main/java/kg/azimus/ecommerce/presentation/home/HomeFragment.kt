@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
 import kg.azimus.ecommerce.R
 import kg.azimus.ecommerce.model.Products
 import kg.azimus.ecommerce.presentation.home.adapter.ProductAdapter
 import kg.azimus.ecommerce.util.toast
 import kotlinx.android.synthetic.main.fragment_home.*
+
 
 private const val TAG = "HomeFragment"
 
@@ -24,20 +26,15 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view: View? = null
-        if (view == null) {
-            view = inflater.inflate(R.layout.fragment_home, container, false)
-        }
-        return view
-
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initRecycler()
         readDataFromDataBase()
+        hideFabOnScroll()
     }
-
 
     private fun initRecycler() {
         mAdapter = ProductAdapter()
@@ -59,6 +56,19 @@ class HomeFragment : Fragment() {
 
             override fun onCancelled(error: DatabaseError) {
                 activity?.toast(context!!.applicationContext, "Error: ${error.message}")
+            }
+        })
+    }
+
+    private fun hideFabOnScroll() {
+        home_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0 || dy < 0 && cart_fab.isShown) cart_fab.hide()
+            }
+
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) cart_fab.show()
+                super.onScrollStateChanged(recyclerView, newState)
             }
         })
     }

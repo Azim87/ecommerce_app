@@ -20,17 +20,17 @@ import kotlinx.android.synthetic.main.activity_login.*
 
 
 private const val TAG = "LoginActivity"
-private var DB_NAME = "Users"
-
 class LoginActivity : AppCompatActivity() {
+
+    private var defaultDbName = "Users"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        Paper.init(this)
         onLogInButtonClick()
         onAdminClick()
         onNotAdminClick()
-        Paper.init(this)
     }
 
     private fun onLogInButtonClick() {
@@ -65,15 +65,11 @@ class LoginActivity : AppCompatActivity() {
 
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.child(DB_NAME).child(phoneNumber).exists()) {
-                    val userModel: UserModel? =
-                        snapshot
-                            .child(DB_NAME)
-                            .child(phoneNumber)
-                            .getValue(UserModel::class.java)
+                if (snapshot.child(defaultDbName).child(phoneNumber).exists()) {
+                    val userModel: UserModel? = snapshot.child(defaultDbName).child(phoneNumber).getValue(UserModel::class.java)
                     if (userModel!!.phoneNumber.equals(phoneNumber)) {
                         if (userModel.password.equals(password)) {
-                            if (DB_NAME == "Admin") {
+                            if (defaultDbName.equals("Admin")) {
                                 toast(this@LoginActivity, "Login Successful.")
                                 ActivityHelper.start<AdminCategoryActivity>(this@LoginActivity)
                                 Log.d(TAG, "onDataChange:  admin" )
@@ -81,12 +77,12 @@ class LoginActivity : AppCompatActivity() {
                                 showLoading(false)
                                 clearUserData()
 
-                            } else if (DB_NAME == "Users") {
+                            } else if (defaultDbName.equals("Users")) {
                                 toast(this@LoginActivity, "Login Successful.")
                                 ActivityHelper.start<HomeActivity>(this@LoginActivity)
+                                finish()
                                 Prevalent.currentUserOnline = userModel
                                 Log.d(TAG, "onDataChange: user")
-                                finish()
                                 showLoading(false)
                                 clearUserData()
                             }
@@ -108,23 +104,23 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-    private fun onAdminClick() {
-        login_an_admin.setOnClickListener {
-            DB_NAME = "Admin"
-            Log.d(TAG, "onAdminClick: admin click")
-            login_btn.text = "Login as Admin"
-            login_an_admin.visibility = View.INVISIBLE
-            login_non_admin.visibility = View.VISIBLE
-        }
-    }
-
     private fun onNotAdminClick() {
         login_non_admin.setOnClickListener {
-            DB_NAME = "Users"
             Log.d(TAG, "onNotAdminClick: not admin click")
             login_btn.text = "Login"
             login_an_admin.visibility = View.VISIBLE
             login_non_admin.visibility = View.INVISIBLE
+            defaultDbName = "Users"
+        }
+    }
+
+    private fun onAdminClick() {
+        login_an_admin.setOnClickListener {
+            Log.d(TAG, "onAdminClick: admin click")
+            login_btn.text = "Login as Admin"
+            login_an_admin.visibility = View.INVISIBLE
+            login_non_admin.visibility = View.VISIBLE
+            defaultDbName = "Admin"
         }
     }
 

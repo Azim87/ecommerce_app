@@ -31,10 +31,9 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
-
+        setUserName()
         Paper.init(this)
         setUpNavigation()
-        setUserName()
     }
 
     private fun setUpNavigation() {

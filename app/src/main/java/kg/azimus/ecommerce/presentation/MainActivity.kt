@@ -28,11 +28,9 @@ class MainActivity : AppCompatActivity() {
     private fun init() {
         welcome_btn.setOnClickListener {
             ActivityHelper.start<LoginActivity>(this)
-            finish()
         }
         join_btn.setOnClickListener {
             ActivityHelper.start<RegisterActivity>(this)
-            finish()
         }
 
         val userPhoneKey = Paper.book().read<String>(Prevalent.UserPhoneKey)
@@ -61,6 +59,7 @@ class MainActivity : AppCompatActivity() {
                         if (userModel.password.equals(password)) {
                             toast(this@MainActivity, "Login Successful.")
                             ActivityHelper.start<HomeActivity>(this@MainActivity)
+                            Prevalent.currentUserOnline = userModel
                             finish()
                             showLoading(false)
                         } else {
